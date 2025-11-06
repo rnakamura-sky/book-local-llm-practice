@@ -43,7 +43,7 @@
         now = datetime.now().strftime("%H:%M:%S")
         message = html.escape(message).replace("\n", "<br>")
         chat_div.innerHTML += f"{now} <b>{sender}</b>: "
-        chat_div.innerHTML += f"<span id='msg{no}'>{message}</spna><hr>"
+        chat_div.innerHTML += f"<span id='msg{no}'>{message}</span><hr>"
     
     # Socket.IOのイベントを処理する関数を定義
     socket.on("connect", create_proxy(
