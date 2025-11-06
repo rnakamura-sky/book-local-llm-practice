@@ -43,7 +43,7 @@ def handle_message(data):
         # チャンクを受信したら、クライアントに送信
         if "message" in chunk:
             subtext = chunk["message"]["content"]
-            emit("bot_stream", {"message": subtext})
+            emit("bot_stream", {"chunk": subtext})
             text += subtext
     # ストリームの終了を通知
     emit("bot_stream_end", {"text": text})

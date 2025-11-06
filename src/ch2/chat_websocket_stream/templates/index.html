@@ -46,61 +46,48 @@
         chat_div.innerHTML += f"<span id='msg{no}'>{message}</spna><hr>"
     
     # Socket.IOのイベントを処理する関数を定義
-    def on_connect():
-        add_message("■", "サーバーに接続", 0)
-    def on_disconnect(event):
-        add_message("■", "サーバーから切断", 0)
-    def on_error(event):
-        add_message("■", f"エラー： {event}", 0)
+    socket.on("connect", create_proxy(
+        lambda: add_message("@", "サーバーに接続", 0)))
+    socket.on("disconnect", create_proxy(
+        lambda: add_message("@", "サーバーから切断", 0)))
+    socket.on("error", create_proxy(
+        lambda: add_message("@", f"エラー： {event}", 0)))
+        
     def on_btn_stream(event):
         # 受信したメッセージを会話に追加
         chunk = event.chunk
-        msg = document.getElementById(f"msg"{len(history)}")
+        msg = document.getElementById(f"msg{len(history)}")
         chunk_html = html.escape(chunk).replace("\n", "<br>")
-        mes.innerHTML += chunk_html # メッセージを追加
+        msg.innerHTML += chunk_html # メッセージを追加
     socket.on("bot_stream", create_proxy(on_btn_stream))
 
     def on_bot_stream_end(event):
-        # 受信したメッセージを会話に追加
-        ############################### ここまで ###############################
-        message = message_input.value
-        if message:
-            add_message("You", message)
-            obj = {
-                "role": "user",
-                "content": message
-            }
-            history.append(obj) # チャット履歴に追加
-            # WebSocketサーバーに送信
-            socket.emit(
-                "user_message",
-                to_js({"messages": history})
-            )
-            message_input.value = ""
+        # チャット履歴にメッセージを追加
+        history.append({
+            "role": "assistant",
+            "content": event.text
+        })
+    socket.on("bot_stream_end", create_proxy(on_bot_stream_end))
 
-
-    # Socket.IOのイベントを登録
-    socket.on("connect", create_proxy(on_connect))
-    socket.on("disconnect", create_proxy(on_disconnect))
-    socket.on("error", create_proxy(on_error))
-    socket.on("bot_response", create_proxy(on_btn_response))
-
-    # メッセージ送信ボタンのクリックイベントを登録
+    # 「送信」ボタンを押したときに実行する関数
     def send_message(event):
         message = message_input.value
-        if message:
-            add_message("You", message)
-            obj = {
-                "role": "user",
-                "content": message
-            }
-            history.append(obj) # チャット履歴に追加
-            # WebSocketサーバーに送信
-            socket.emit(
-                "user_message",
-                to_js({"messages": history})
-            )
-            message_input.value = ""
+        add_message("You", message, len(history)) # HTMLに追加
+        
+        history.append({
+            "role": "user",
+            "content": message
+        }) # チャット履歴に追加
+
+        # 表示を更新
+        add_message("Bot", "", len(history)) # HTMLに追加
+        # WebSocketサーバーに送信
+        socket.emit(
+            "user_message",
+            to_js({"messages": history})
+        )
+        message_input.value = ""
+
     # メッセージ送信ボタンのクリックイベントを登録
     send_button.addEventListener(
         "click",
