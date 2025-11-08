@@ -35,7 +35,10 @@ def generate(user: str):
         return "良かったです。天気や時間が知りたいですか？"
     if re.search(r"ありがとう.*", user):
         return "どういたしまして。他にも何かお手伝いできるでしょうか？"
-##################### ここを作りこむ ########################
+    if re.search(r"天気", user):
+        return get_weather(user)
+    if re.search(r"時間|今|何時", user):
+        return f"現在の時刻は{time.strftime('%H:%M:%S')}です。"
     return "申し訳ありませんが、その質問にはお答えできません。"
 
 def main_loop() -> None:
