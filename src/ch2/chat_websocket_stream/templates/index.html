@@ -53,13 +53,13 @@
     socket.on("error", create_proxy(
         lambda: add_message("@", f"エラー： {event}", 0)))
         
-    def on_btn_stream(event):
+    def on_bot_stream(event):
         # 受信したメッセージを会話に追加
         chunk = event.chunk
         msg = document.getElementById(f"msg{len(history)}")
         chunk_html = html.escape(chunk).replace("\n", "<br>")
         msg.innerHTML += chunk_html # メッセージを追加
-    socket.on("bot_stream", create_proxy(on_btn_stream))
+    socket.on("bot_stream", create_proxy(on_bot_stream))
 
     def on_bot_stream_end(event):
         # チャット履歴にメッセージを追加

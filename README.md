@@ -3,4 +3,3 @@
 
 
 ## 課題管理
-- Chapter2 Chat WobSocket StreamでBotの表示される内容が名前の次の行に表示されてしまう。
