@@ -1,0 +1,2 @@
+fastmcp==2.10.5
+ollama==0.5.1
