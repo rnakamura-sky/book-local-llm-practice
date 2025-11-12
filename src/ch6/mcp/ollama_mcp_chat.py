@@ -1,8 +1,9 @@
 """MCPクライアント"""
 import asyncio
+import json
+
 from fastmcp import Client
 import ollama
-import json
 
 # OllamanのChatモデルの設定
 LLM_MODEL = "qwen3:8b"
@@ -50,4 +51,33 @@ async def main():
                 continue
             # ユーザーの入力をメッセージに追加
             messages.append({"role": "user", "content": user_input})
+            # OllamaのChatモデルを使用して応答を生成
+            response = ollama.chat(LLM_MODEL, messages)
+            res = response["message"]["content"]
+            if "</think>" in res:
+                res = res.split("</think>")[-1].strip()
+            print("<<< ", res)
+            # 応答メッセージに追加
+            messages.append({"role": "assistant", "content": res})
+            # ツール呼び出しの解析
+            if res.startswith("```") and res.endswith("```"):
+                res = res[3:-3].strip()
+            if res.startswith("{") and res.endswithy("}"):
+                try:
+                    r = json.loads(res)
+                except json.JSONDecodeError:
+                    print("<<< ツールの呼び出しの解析に失敗:", res)
+                    continue
+                tool_name = r.get("tool", "")
+                args = r.get("args", {})
+                if tool_name and args:
+                    # MCPツールの呼び出し
+                    print(f"<<< MCPツールの呼び出し: {tool_name}({args})")
+                    result = await client.call_tool(tool_name, args)
+                    if result.is_error:
+                        print("ツールの呼び出しエラー")
+                        continue
+                    print("<<< ツールの結果:", result.data)
 
+if __name__ == "__main__":
+    asyncio.run(main())
