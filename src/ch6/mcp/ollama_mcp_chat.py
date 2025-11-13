@@ -22,7 +22,7 @@ LLM_PROMPT = """\
 async def main():
     """MCPクライアントメイン処理"""
     # MCPクライアントの初期化
-    client = Client("http://127.0.0.1:80001/mcp")
+    client = Client("http://127.0.0.1:8001/mcp")
     async with client:
         await client.ping()
         # 利用可能なツールのリストを取得
@@ -62,7 +62,7 @@ async def main():
             # ツール呼び出しの解析
             if res.startswith("```") and res.endswith("```"):
                 res = res[3:-3].strip()
-            if res.startswith("{") and res.endswithy("}"):
+            if res.startswith("{") and res.endswith("}"):
                 try:
                     r = json.loads(res)
                 except json.JSONDecodeError:

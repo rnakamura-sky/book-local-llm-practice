@@ -26,4 +26,4 @@ def hello(name :str) -> str:
 
 if __name__ == "__main__":
     # HTTPモードで起動
-    mcp.run(transport="http", host="127.0.0.1", port=80001)
+    mcp.run(transport="http", host="127.0.0.1", port=8001)
