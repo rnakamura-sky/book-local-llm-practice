@@ -9,6 +9,18 @@ TARGET_EXT = [".md", ".txt"] # 対象ファイルの拡張子
 EMBEDDING_MODEL = "granite-embedding:278m"
 # LLMモデル設定
 LLM_MODEL = "qwen3:8b"
-TEMPERATIRE = 0.4
+TEMPERATURE = 0.4
 # 検索設定
-
+CHUNK_SIZE = 1000 # テキストを分割するチャンクのサイズ
+CHUNK_OVERLAP = 200 # 分割時の重ね合わせのサイズ
+RETRIEVAL_K = 3 # 検索で取得する関連文章数
+# QAのためのテンプレート
+QA_TEMPLATE = """\
+### 指示:
+以下のコンテキストに基づいて質問に簡潔に答えてください。
+コンテキストに答えがない場合は「提供されたコンテキストでは答えられません。」と答えてください。
+### コンテキスト:
+{context}
+### 質問:
+{question}
+"""
