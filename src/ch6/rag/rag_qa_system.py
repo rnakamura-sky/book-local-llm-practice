@@ -57,5 +57,44 @@ def initialize_system():
 
 def load_documents(target_dir: str) -> List[Document]:
     """textディレクトリからMarkdownファイルを読み込む"""
-    
+    documents = []
+    # 対象ファイルを検索
+    all_files = []
+    for ext in config.TARGET_EXT:
+        pattern = os.path.join(target_dir, f"*{ext}")
+        all_files.extend(glob.glob(pattern))
+    print(f"対象ファイル: {len(all_files)}個をDBに登録します")
+    # 各ファイルを読み込む
+    for file_path in all_files:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        # Documentオブジェクトを作成
+        doc = Document(
+            page_content=content,
+            metadata={
+                "source": file_path,
+                "filename": os.path.basename(file_path)
+            }
+        )
+        documents.append(doc)
+    return documents
 
+def split_documents(documents: List[Document]) -> List[Document]:
+    """ドキュメントをチャンクに分割"""
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=config.CHUNK_SIZE,
+        chunk_overlap=config.CHUNK_OVERLAP,
+        length_function=len,
+        separators=["\n\n", "\n", "。", ".", "　", " "]
+    )
+    split_docs = text_splitter.split_documents(documents)
+    print(f"チャンク分割: {len(split_docs)}個")
+    return split_docs
+
+def ask_question(question: str) -> tuple[str, List[Document]]:
+    """質問に対する回答を生成"""
+    if not qa_chain or not retriever:
+        raise ValueError("システムが初期化されていません。")
+    response = qa_chain.invoke(question) # 質問を処理して回答を生成
+    docs = retriever.invoke(question) # 関連ドキュメントを取得
+    return (response, docs)
