@@ -32,7 +32,7 @@ for i, sentence_embedding in enumerate(embeddings_list):
     similarities.append((sentences[i], similarity))
 
 # 類似度でソート(降順)
-similarity.sort(key=lambda x: x[1], reverse=True)
+similarities.sort(key=lambda x: x[1], reverse=True)
 
 # 結果を表示
 print(f"基準文章： {sentences[0]}")
