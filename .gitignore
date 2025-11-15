@@ -191,8 +191,13 @@ pip-selfcheck.json
 src/ch3/shinri_shiken_fix.txt
 src/ch3/markov_model_ranpo.json
 
+src/ch3/kinokobooks/**
+
 src/ch3/lstm_text_gen/corpus/**
 src/ch3/lstm_text_gen/model/**
+
+src/ch3/transformer_text_gen/corpus/**
+src/ch3/transformer_text_gen/model/**
 
 src/ch5/text2image/images/
 src/ch5/text2image/models/
