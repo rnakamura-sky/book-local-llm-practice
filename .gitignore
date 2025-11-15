@@ -192,3 +192,8 @@ src/ch3/shinri_shiken_fix.txt
 src/ch3/markov_model_ranpo.json
 src/ch5/text2image/images/
 src/ch5/text2image/models/
+
+/src/ch6/rag/text/**
+!/src/ch6/rag/text/**.gitignore
+/src/ch6/rag/chroma_db/**
+!/src/ch6/rag/chroma_db/**.gitignore

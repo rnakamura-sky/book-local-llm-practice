@@ -21,3 +21,14 @@ try:
             answer = answer.split("</think>")[1].strip()
         print(f"<<< ☺ 回答:\n{answer}")
         # 関連ドキュメントの表示
+        print(f"<<< 📚 参考ドキュメント:")
+        for doc in docs:
+            filename = doc.metadata.get("filename", "?")
+            # ファイル内容から先頭部分を表示
+            preview = doc.page_content[:30].replace("\n", "")
+            print(f"- {filename}: {preview}...")
+
+except KeyboardInterrupt:
+    pass
+except Exception as e:
+    print(f"[ERROR] {e}")

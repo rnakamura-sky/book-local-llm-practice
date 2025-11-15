@@ -8,6 +8,7 @@
 - Chapter5 pythonのversion指定をするため、wsl上で実行しています。
 - Chapter6 fastmcpを使用するときに、pydanticが2.12だと実行エラーが発生する  
     [[Bug]: mcp-atlassian not compatible with Pydantic 2.12.0 #721](https://github.com/sooperset/mcp-atlassian/issues/721)
+- LangChainのバージョンが変わった（？）からインポートパッケージ先が変わっている
 
 ## 感じたこと
 - Chapter3 データ集める&成形は大変だな。。
